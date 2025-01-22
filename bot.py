@@ -1,14 +1,58 @@
-# Existing imports remain the same
-from aiohttp import web
-import ssl  # Add SSL module for handling certificates
+import sys
+import glob
+import importlib
+from pathlib import Path
+from pyrogram import idle
+import logging
+import logging.config
+import ssl
 
-# Paths to your SSL certificate and private key
-SSL_CERT_PATH = '/www/server/panel/vhost/cert/st.jnmovies.site/fullchain.pem'
-SSL_KEY_PATH = '/www/server/panel/vhost/cert/st.jnmovies.site/privkey.pem'
+# Get logging configurations
+logging.config.fileConfig('logging.conf')
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
+logging.getLogger("imdbpy").setLevel(logging.ERROR)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logging.getLogger("aiohttp").setLevel(logging.ERROR)
+logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
+
+
+from pyrogram import Client, __version__
+from pyrogram.raw.all import layer
+from database.ia_filterdb import Media
+from database.users_chats_db import db
+from info import *
+from utils import temp
+from typing import Union, Optional, AsyncGenerator
+from pyrogram import types
+from Script import script 
+from datetime import date, datetime 
+import pytz
+from aiohttp import web
+from plugins import web_server
+
+import asyncio
+from pyrogram import idle
+from lazybot import LazyPrincessBot
+from util.keepalive import ping_server
+from lazybot.clients import initialize_clients
+
+
+ppath = "plugins/*.py"
+files = glob.glob(ppath)
+LazyPrincessBot.start()
+loop = asyncio.get_event_loop()
+
 
 async def Lazy_start():
     print('\n')
     print('Initalizing The Movie Provider Bot')
+    # Paths to your SSL certificate and private key
+    SSL_CERT_PATH = '/www/server/panel/vhost/cert/st.jnmovies.site/fullchain.pem'
+    SSL_KEY_PATH = '/www/server/panel/vhost/cert/st.jnmovies.site/privkey.pem'
     bot_info = await LazyPrincessBot.get_me()
     LazyPrincessBot.username = bot_info.username
     await initialize_clients()
@@ -42,31 +86,23 @@ async def Lazy_start():
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
     await LazyPrincessBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
-    
-    # Initialize the web server with SSL
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0"
-    
+    #await web.TCPSite(app, bind_address, PORT).start()
     # Configure SSL context
     ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
     ssl_context.load_cert_chain(SSL_CERT_PATH, SSL_KEY_PATH)
-    
     # Start the web server with SSL
     await web.TCPSite(app, bind_address, PORT, ssl_context=ssl_context).start()
+    
+    
+    
     await idle()
+
 
 if __name__ == '__main__':
     try:
         loop.run_until_complete(Lazy_start())
     except KeyboardInterrupt:
         logging.info('Service Stopped Bye 👋')
-
-
-
-
-
-
-
-
-
