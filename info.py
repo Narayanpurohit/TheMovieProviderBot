@@ -105,7 +105,7 @@ if 'DYNO' in environ:
 else:
     ON_HEROKU = False
 BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
-FQDN = str(getenv('FQDN', 'st.jnmovies.site:5000')) #if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
+FQDN = str(getenv('FQDN', 'Jndrive.space:5000')) #if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
 
 
 URL = "https://{}/".format(FQDN) if ON_HEROKU or NO_PORT else \
