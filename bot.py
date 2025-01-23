@@ -51,8 +51,8 @@ async def Lazy_start():
     print('\n')
     print('Initalizing The Movie Provider Bot')
     # Paths to your SSL certificate and private key
-    SSL_CERT_PATH = '/www/server/panel/vhost/cert/st.jnmovies.site/fullchain.pem'
-    SSL_KEY_PATH = '/www/server/panel/vhost/cert/st.jnmovies.site/privkey.pem'
+    SSL_CERT_PATH = '/www/server/panel/vhost/cert/jndrive.space/fullchain.pem'
+    SSL_KEY_PATH = '/www/server/panel/vhost/cert/jndrive.space/privkey.pem'
     bot_info = await LazyPrincessBot.get_me()
     LazyPrincessBot.username = bot_info.username
     await initialize_clients()
