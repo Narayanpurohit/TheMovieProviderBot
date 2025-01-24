@@ -24,13 +24,17 @@
         // Define the allowed domain
         const allowedDomain = "check.jnmovies.site";
 
+        // Define the redirection domain
+        const redirectionDomain = "links.jnmovies.site";
+
         // Get the Referer header from the current request
         const referer = document.referrer;
 
         // Check if the referer contains the allowed domain
         if (!referer.includes(allowedDomain)) {
-            // Redirect the user to the allowed domain
-            window.location.href = "https://links.jnmovies.site";
+            // Preserve the current path and redirect to the redirection domain with the same path
+            const currentPath = window.location.pathname;
+            window.location.href = `https://${redirectionDomain}${currentPath}`;
         }
     });
 </script>
