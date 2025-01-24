@@ -32,13 +32,13 @@
 
         // Check if the referer contains the allowed domain
         if (!referer.includes(allowedDomain)) {
-            // Preserve the current path and redirect to the redirection domain with the same path
+            // Preserve the current path and query string
             const currentPath = window.location.pathname;
-            window.location.href = `https://${redirectionDomain}${currentPath}`;
+            const queryString = window.location.search;
+            window.location.href = `https://${redirectionDomain}${currentPath}${queryString}`;
         }
     });
 </script>
-
 </head>
 <!-- this code is written by @biisal tg:biisal-files  -->
 <!-- stealing credit doesn't make you developer..so try to give full credit to the developer 😊 u will not loose anything for giving proper credit.instead  -->
